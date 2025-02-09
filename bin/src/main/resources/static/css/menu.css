@@ -1,0 +1,48 @@
+#userSVG {
+	width: 40px;
+	height: auto;
+}
+
+
+/* Estilo para enlaces activos */
+.active a {
+  color: #deddda; /* Color resaltado (naranja brillante) */
+  text-decoration: underline;
+}
+
+.link, .navbar-toggler, 
+.navbar-toggler-icon, .navbar-collapse,
+.navbar-toggler-icon {
+	color: #ffffff;
+}
+
+@media (max-width: 481px) {
+	.link {
+		color: #000000;
+		z-index: 1;
+	}
+}
+
+.navbar-toggler {
+	position: sticky;
+	z-index: 1;
+}
+
+#mobile-logo {
+	max-width: 100px;
+}
+
+.expanded-logo {
+  max-width: 280px !important; /* Cambiar tamaño */
+  transition: all 0.7s ease; /* Animación suave */
+}
+
+#user-login {
+	align-items: center;
+}
+
+.expanded-login {
+	align-items: baseline !important;
+	margin-top: 1%;
+}
+

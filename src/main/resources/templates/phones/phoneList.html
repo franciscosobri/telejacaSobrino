@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+	<div class="container" th:fragment="mainContent" >
+		<h1 class="text-center mt-5 mb-4">Lista de teléfonos</h1>
+		<div class="d-flex justify-content-center mb-4">
+			<a th:href="@{/phone/add}" class='addButton' >Añadir +</a>		
+		</div>	
+		
+		<div class="alert text-center mb-2" th:classappend="${msgClass}" th:if="${msg}" th:text="${msg}"></div>
+		
+		<table class='table table-hover table-fixed'>
+			<thead>
+				<tr>
+					<th>Usuario</th>
+					<th>Teléfono</th>
+					<!-- <th>Descripción</th> -->
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody th:each="phone : ${phones}">
+				<tr><!-- Procesar los datos en el servicio, para que se muestre la información procesada (la edad entre paréntesis, p.e.) -->
+					<td th:text="${phone.phoneUser.name} + ' ' + ${phone.phoneUser.surname}"> </td>
+					<td th:text="${phone.number}"></td>
+					<!-- <td th:text="${phone.description}"></td> -->
+					<td>
+					<a th:href="@{/phone/show/{id}(id=${phone.id})}" data-toggle="tooltip" data-placement="top" title="Ver más">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 250 250" fill="#5f6368">
+							  <g transform="translate(0.000000,250.000000) scale(0.100000,-0.100000)" stroke="none">
+							    <path d="M1170 2354 c-200 -31 -332 -68 -444 -127 -272 -141 -501 -383 -650 -687 -67 -136 -72 -175 -37 -277 61 -177 193 -374 357 -533 138 -133 296 -232 485 -303 133 -50 185 -44 229 28 47 76 4 147 -114 191 -178 65 -332 162 -450 282 -105 107 -157 178 -226 313 l-59 116 59 113 c142 267 296 424 525 534 177 86 328 115 497 96 383 -43 688 -283 888 -701 l22 -45 -57 -113 c-75 -150 -76 -203 -3 -246 38 -22 89 -22 126 0 64 38 175 277 174 372 -2 84 -92 269 -212 436 -61 84 -246 266 -333 328 -132 93 -274 154 -452 194 -103 23 -269 38 -325 29z"/>
+							    <path d="M1126 1839 c-114 -28 -245 -134 -303 -245 -106 -201 -73 -424 87 -584 100 -100 202 -140 353 -140 130 0 234 40 325 125 259 241 196 653 -123 811 -73 36 -82 38 -188 40 -62 2 -129 -1 -151 -7z m201 -242 c172 -64 230 -273 112 -402 -57 -62 -99 -79 -186 -76 -87 2 -109 9 -158 53 -75 65 -103 174 -70 267 22 65 62 108 128 141 65 32 118 37 174 17z"/>
+							    <path d="M1883 960 c-47 -29 -56 -54 -61 -177 l-5 -113 -76 -1 c-118 -1 -171 -12 -198 -43 -31 -36 -38 -70 -24 -117 19 -64 54 -79 187 -79 l112 0 4 -119 c5 -134 16 -163 74 -187 71 -30 147 11 158 84 3 20 8 76 11 123 l7 86 119 10 c131 12 150 20 176 81 19 46 3 104 -39 134 -28 19 -47 23 -150 26 l-118 4 0 105 c0 124 -13 163 -63 186 -46 22 -75 21 -114 -3z"/>
+							  </g>
+						</svg></a>
+					
+					<a class='mx-3' th:href="@{/phone/edit/{id}(id=${phone.id})}" data-toggle="tooltip" data-placement="top" title="Editar">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z"/>
+						</svg></a>
+					
+					<a th:href="@{/phone/delete/{id}(id=${phone.id})}" data-toggle="tooltip" data-placement="top" title="Eliminar">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+						</svg></a>
+					
+					</td>
+				</tr>	
+			</tbody>
+		</table>	
+	</div>
+</html>

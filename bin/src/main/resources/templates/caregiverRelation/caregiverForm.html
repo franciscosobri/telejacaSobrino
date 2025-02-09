@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+<div th:fragment="mainContent" >
+
+<body>
+<div class='row ' >
+
+	<div class="container mt-3 col col-md-10 text-center">
+		<div th:if="${msg}" th:text="${msg}" class='alert alert-success' ></div>
+		<div th:if="${errorMsg}" th:text="${errorMsg}"  class='alert alert-danger'></div>
+			<!--  <h1 class="text-center mt-5 mb-4" th:text="${'Añadir relación para el usuario '+user.name}" ></h1>-->
+			<h1 class="text-center mt-5 mb-4" >Añadir relación de cuidado</h1>
+			<p>Aquí podrás añadir relaciónes de cuidado entre usuarios registrados en el sistema.</p>
+			<div class="alert alert-success text-center m-0 mb-2" th:if="${successMsg}" th:text="${successMsg}"></div>
+			<div class="div-form mb-5">
+				<form th:action="@{/caregiverRelation/add}" method = 'post' class='form mx-5 ' th:object=${CaregiverRelation} >
+					<!-- <input type="hidden" name="userId" th:value="${user.id}" /> -->
+					
+					<div class='row mt-3'>
+						<div class="form-group col-12 col-lg-6 " th:classapend="${#fields.hasErrors('caregiver')} ? 'has-error'">
+							<label for='caregiver' class="my-3"><strong>Usuario cuidador</strong></label>
+							<select  th:field=*{caregiver} name='caregiver' id='caregiver' class='form-select' size=20 >
+								<option th:each="caregiver : ${usersList}" th:value="${caregiver.id}" th:text="${caregiver.name+' '+caregiver.surname}" ></option>
+							</select>
+							<span th:if="${#fields.hasErrors('caregiver')}" th:errors="*{caregiver}" class="help-block" id="id-error-caregiver">Errores</span>
+						</div>
+						<div class="form-group col-12 col-lg-6 mt-3 mt-lg-0" th:classapend="${#fields.hasErrors('recipentUser')} ? 'has-error'">
+							<label for='recipentUser' class="my-3"><strong>Usuario receptor del cuidado</strong></label>
+							<select  th:field=*{recipentUser} name='recipentUser' id='recipentUser' class='form-select' size=20 >
+								<option th:each="careeUser : ${usersList}" th:value="${careeUser.id}" th:text="${careeUser.name+' '+ careeUser.surname}" ></option>
+							</select>							
+							<span th:if="${#fields.hasErrors('recipentUser')}" th:errors="*{recipentUser}" class="help-block" id="id-error-recipentUser">Errores</span>
+						</div>
+					</div>
+					<div class='mt-5' >
+						<a th:href="@{/users}" class="secondaryButton me-4" >Cancelar</a>	
+						<input type='submit' id='submit' name='submit' value='Guardar relación' class='mainActionButton'>								
+					</div>
+				</form>	
+			</div>
+	</div>
+
+</div>
+</body>
+</div>
+</html>

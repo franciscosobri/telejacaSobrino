@@ -1,0 +1,112 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+<div class='row w-100 h-100' th:fragment="mainContent">
+	<nav class="nav userNav col col-md-2" th:if="${activity!='add'}">
+      
+		<ul class="flex-column pe-2 py-3" >		
+			<li class="nav-item" th:classappend="${currentPath == 'detalles' ? 'active' : ''}">
+		    	<a class="nav-link active" aria-current="page" th:href="@{/user/{id}(id=${user.id})}">Detalles del usuario</a>
+		  	</li>	
+			<li class="nav-item" th:classappend="${currentPath == 'llamadas' ? 'active' : ''}">
+			    <a class="nav-link active" th:href="@{/user/{id}/calls(id=${user.id})}">Panel de llamada</a>
+			</li>
+			<li class="nav-item" th:classappend="${currentPath == 'telefonos' ? 'active' : ''}">
+			    <a class="nav-link" th:href="@{/user/{id}/phones(id=${user.id})}" >Teléfonos</a>
+			</li>
+			<li class="nav-item" th:classappend="${currentPath == 'medicamentos' ? 'active' : ''}">
+			    <a class="nav-link" th:href="@{/user/{id}/medicationList(id=${user.id})}">Medicamentos</a>
+			</li>
+			<li class="nav-item" th:classappend="${currentPath == 'relaciones' ? 'active' : ''}">
+			    <a class="nav-link " th:href="@{/caregiversList/{id}(id=${user.id})}" >Relaciones de cuidado</a>
+			</li>
+		</ul>
+		
+		<div class='d-flex align-items-center text-center mx-auto ps-2'>
+			<a th:href="@{/user/delete/{id}(id=${id})}" class="deleteLink mt-auto mb-5" >Dar de baja</a>	
+		</div>
+		
+	</nav>
+	
+	<div class="mt-3 col col-md-8 mx-auto" th:object="${user}">
+	
+		<div th:if="${msg}" class='msg alert alert-info my-3' th:text="${msg}" ></div>
+		<div th:if="${errorMsg}" class='msg alert alert-danger my-3' th:text="${errorMsg}" ></div>
+		
+		<h1 class="text-center mt-5 mb-4" th:text="'Relaciones de cuidado de '+${user.name}" ></h1>
+		<!--  <div class="d-flex justify-content-center mb-4">
+			<a th:href="@{/user/{id}/addRelation(id=${userId})}" class='addButton'>Añadir Relación</a>		
+		</div>-->
+		<div class='row mt-5'>
+			<div class='col me-5'>
+				<h5 class='text-center my-2' th:text="'Usuarios bajo el cuidado de '+ ${user.name}" > </h5>
+				<div th:if="${user.userCaregiverRelation.size!=0}" class='col mt-3'>
+					<table class='table table-hover table-fixed' >
+						<thead>
+							<tr>
+								<th>Usuario</th>
+								<th>Ver usuario</th>
+								<!-- <th>Eliminar relación</th> -->
+							</tr>
+						</thead>
+						<tbody th:each="caregiverRelation : ${caregiversRelation}">
+								<tr><!-- Procesar los datos en el servicio, para que se muestre la información procesada (la edad entre paréntesis, p.e.) -->
+									<td th:text="${caregiverRelation.recipentUser.name +' '+caregiverRelation.recipentUser.surname}" class='overflow-auto'> </td>
+									<td><a th:href="@{/user/{id}(id=${caregiverRelation.recipentUser.id})}" data-toggle="tooltip" data-placement="top" title="Ver más" >
+											<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 250 250" fill="#5f6368">
+											  <g transform="translate(0.000000,250.000000) scale(0.100000,-0.100000)" stroke="none">
+											    <path d="M1170 2354 c-200 -31 -332 -68 -444 -127 -272 -141 -501 -383 -650 -687 -67 -136 -72 -175 -37 -277 61 -177 193 -374 357 -533 138 -133 296 -232 485 -303 133 -50 185 -44 229 28 47 76 4 147 -114 191 -178 65 -332 162 -450 282 -105 107 -157 178 -226 313 l-59 116 59 113 c142 267 296 424 525 534 177 86 328 115 497 96 383 -43 688 -283 888 -701 l22 -45 -57 -113 c-75 -150 -76 -203 -3 -246 38 -22 89 -22 126 0 64 38 175 277 174 372 -2 84 -92 269 -212 436 -61 84 -246 266 -333 328 -132 93 -274 154 -452 194 -103 23 -269 38 -325 29z"/>
+											    <path d="M1126 1839 c-114 -28 -245 -134 -303 -245 -106 -201 -73 -424 87 -584 100 -100 202 -140 353 -140 130 0 234 40 325 125 259 241 196 653 -123 811 -73 36 -82 38 -188 40 -62 2 -129 -1 -151 -7z m201 -242 c172 -64 230 -273 112 -402 -57 -62 -99 -79 -186 -76 -87 2 -109 9 -158 53 -75 65 -103 174 -70 267 22 65 62 108 128 141 65 32 118 37 174 17z"/>
+											    <path d="M1883 960 c-47 -29 -56 -54 -61 -177 l-5 -113 -76 -1 c-118 -1 -171 -12 -198 -43 -31 -36 -38 -70 -24 -117 19 -64 54 -79 187 -79 l112 0 4 -119 c5 -134 16 -163 74 -187 71 -30 147 11 158 84 3 20 8 76 11 123 l7 86 119 10 c131 12 150 20 176 81 19 46 3 104 -39 134 -28 19 -47 23 -150 26 l-118 4 0 105 c0 124 -13 163 -63 186 -46 22 -75 21 -114 -3z"/>
+											  </g>
+											</svg>
+										</a>	  
+									</td>		  
+									<!-- <td>
+										<a th:href="@{/user/deleteRelation/{idUser}(idUser=${user.id})/{idCaregiver}(idCaregiver=${caregiverRelation.recipentUser.id})}" data-toggle="tooltip" data-placement="top" title="Eliminar" ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+									</td>-->
+								</tr>	
+						</tbody>
+					</table>	
+				</div>
+				<div th:if="${user.userCaregiverRelation.size==0}">
+					<div class='alert alert-info' th:text="${caregiver_errorMsg}" ></div>
+				</div>
+			</div>
+			<div class='col ms-5'>
+				<h5 class='text-center my-2' th:text="'Usuarios cuidadores de '+${user.name}" ></h5>
+				<div th:if="${user.userCareeRelation.size!=0}" >
+					<table class='table table-hover table-fixed mt-3' >
+						<thead>
+							<tr>
+								<th>Usuario</th>
+								<th>Ver usuario</th>
+								<!--<th>Eliminar relación</th>  -->
+							</tr>
+						</thead>
+						<tbody th:each="recipentCareRelation : ${recipentsCareRelation}">
+							<tr>
+								<td th:text="${recipentCareRelation.caregiver.name+' '+recipentCareRelation.caregiver.surname}" class='overflow-auto'> </td>
+								<td><a th:href="@{/user/{id}(id=${recipentCareRelation.caregiver.id})}" data-toggle="tooltip" data-placement="top" title="Ver más" >
+										<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 250 250" fill="#5f6368">
+										  <g transform="translate(0.000000,250.000000) scale(0.100000,-0.100000)" stroke="none">
+										    <path d="M1170 2354 c-200 -31 -332 -68 -444 -127 -272 -141 -501 -383 -650 -687 -67 -136 -72 -175 -37 -277 61 -177 193 -374 357 -533 138 -133 296 -232 485 -303 133 -50 185 -44 229 28 47 76 4 147 -114 191 -178 65 -332 162 -450 282 -105 107 -157 178 -226 313 l-59 116 59 113 c142 267 296 424 525 534 177 86 328 115 497 96 383 -43 688 -283 888 -701 l22 -45 -57 -113 c-75 -150 -76 -203 -3 -246 38 -22 89 -22 126 0 64 38 175 277 174 372 -2 84 -92 269 -212 436 -61 84 -246 266 -333 328 -132 93 -274 154 -452 194 -103 23 -269 38 -325 29z"/>
+										    <path d="M1126 1839 c-114 -28 -245 -134 -303 -245 -106 -201 -73 -424 87 -584 100 -100 202 -140 353 -140 130 0 234 40 325 125 259 241 196 653 -123 811 -73 36 -82 38 -188 40 -62 2 -129 -1 -151 -7z m201 -242 c172 -64 230 -273 112 -402 -57 -62 -99 -79 -186 -76 -87 2 -109 9 -158 53 -75 65 -103 174 -70 267 22 65 62 108 128 141 65 32 118 37 174 17z"/>
+										    <path d="M1883 960 c-47 -29 -56 -54 -61 -177 l-5 -113 -76 -1 c-118 -1 -171 -12 -198 -43 -31 -36 -38 -70 -24 -117 19 -64 54 -79 187 -79 l112 0 4 -119 c5 -134 16 -163 74 -187 71 -30 147 11 158 84 3 20 8 76 11 123 l7 86 119 10 c131 12 150 20 176 81 19 46 3 104 -39 134 -28 19 -47 23 -150 26 l-118 4 0 105 c0 124 -13 163 -63 186 -46 22 -75 21 -114 -3z"/>
+										  </g>
+										</svg>
+									</a>
+								<!--  <td>
+									<a th:href="@{/user/deleteRelation/{idUser}(idUser=${user.id})/{idRecipentUser}(idRecipentUser=${recipentCareRelation.caregiver.id})}" data-toggle="tooltip" data-placement="top" title="Eliminar relación" ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></a></td>								
+								</td>-->
+							</tr>	
+						</tbody>
+					</table>	
+				</div>
+				<div th:if="${user.userCareeRelation.size==0}">
+					<div class='alert alert-info' th:text="${recipent_errorMsg}" ></div>
+				</div> 
+			</div>
+		</div>
+	</div>
+</div>
+</html>

@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html">
+<body>
+    <div class="container mt-5" th:fragment="mainContent">
+       
+       	<h1 class="text-center mt-5 mb-4" th:text="${h1}"></h1>
+
+        <div class="alert alert-success text-center m-0 mb-2" th:if="${msg}"
+            th:class="${msg.contains('correctamente') ? 'alert alert-success' : 'alert alert-danger'}"
+            th:text="${msg}"></div>
+
+        <div class="div-form">
+            <form th:if="${locality != null}"
+                th:action="${buttonText.equals('Eliminar') ? '/locality/deleteConfirm' : '/locality'}"
+                th:object="${locality}" method="POST" class="form" th:readonly="${buttonText.equals('Mostrar')}">
+                <div class="form-group">
+                    <input type="hidden" th:field="*{id}" class="form-control">
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+                    <label for="name">Nombre Localidad</label>
+                    <input type="text" id="name" name="name" th:field="*{name}" required class="form-control"
+                        th:readonly="${buttonText.equals('Mostrar') || buttonText.equals('Eliminar')}">
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="help-block" id="id-error-name">Errores</span>
+                </div>
+                <div class="buttons text-center mt-5">
+                    <div th:if="${buttonText.equals('Mostrar')}">
+                        <a th:href="@{/locality}" class="mainActionButton me-4">Volver a la lista</a>
+                        <a th:href="@{/locality/edit/{id}(id=${locality.id})}" class="editLink me-4">Editar</a>
+                        <a th:href="@{/locality/delete/{id}(id=${locality.id})}" class="deleteLink me-4">Eliminar</a>
+                        
+                    </div>
+                    <div th:unless="${buttonText.equals('Mostrar')}">
+                        <a th:href="@{/locality}" class="secondaryButton me-4">Cancelar</a>
+                        <input th:if="${buttonText.equals('Enviar')}" type="submit" id="submit" name="submit" value="Dar de Alta" class="mainActionButton">
+                        <input th:if="${buttonText.equals('Editar')}" type="submit" id="submit" name="submit" value="Editar" class="mainActionButton">
+                        <input th:if="${buttonText.equals('Eliminar')}" type="submit" id="submit" name="submit" value="Eliminar" class="cancelButton">
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

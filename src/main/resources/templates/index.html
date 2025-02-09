@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+	<div class="container" th:fragment="mainContent" >
+		<div th:if="${#authentication.name=='anonymousUser'}" >
+			<h1 class="text-center mt-5 mb-4" >Bienvenido/a a TeleJaca</h1>
+			
+			<h4 class="text-center my-5">Tu programa de teleasistencia en el IES Jacarandá</h4>
+			<div class="text-center"><a th:href="@{/login}" class="btnlg">Iniciar Sesión</a></div>
+			
+
+			
+			
+		</div>
+		
+		<div th:unless="${#authentication.name=='anonymousUser'}">
+		    <div th:if="${msg}" th:class="${msg.contains('correctamente') ? 'alert alert-success' : 'alert alert-danger'}" role="alert" th:text="${msg}"></div>
+		
+			<div th:if="${msg!=null}" class='alert alert-success' th:text="${msg}"  ></div>
+				<h1 class="text-center mt-4 mb-3" >TeleJaca</h1>
+				<div class="row justify-content-center text-center">
+					   <div class="col-md-6 mb-4">
+					     <h2>¿Qué deseas hacer?</h2>
+					   </div>
+					</div>		
+			<!-- 	<div class='row' >
+					<div class='col text-center my-5'>
+						<a th:href="@{/call/callFirstStage}" class=' indexButton topButton'>Iniciar una llamada</a>		
+					</div>
+				</div>  -->
+			
+				<div class='row secondRow my-auto'>
+					<div class='col text-center'>
+						<a th:href="@{/call/callFirstStage}" class='indexButton leftButton'>Ver la lista de usuarios</a>
+					</div>
+					<div class='col text-center'>
+						<img src='' alt='Imagen de teleoperador' id="indexImg" class='indexImg' >
+					</div>
+					<div class='col'>
+						<a th:href="@{/}" class='indexButton rightButton ms-5'>Ver mi historial</a>
+					</div>
+			    </div>
+		</div>	
+			
+	</div>
+</html>

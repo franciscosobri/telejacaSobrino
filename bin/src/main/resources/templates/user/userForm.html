@@ -1,0 +1,216 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+<div class="h-100" th:fragment="mainContent" >
+
+<body>
+
+<div class='row w-100 h-100 ' >
+	<nav class="nav userNav col col-md-2" th:if="${activity!='add'}">
+      
+		<ul class="flex-column pe-2 py-3" >		
+			<li class="nav-item" th:classappend="${currentPath == 'detalles' ? 'active' : ''}">
+		    	<a class="nav-link active" aria-current="page" th:href="@{/user/{id}(id=${user.id})}">Detalles del usuario</a>
+		  	</li>	
+			<li class="nav-item" th:classappend="${currentPath == 'llamadas' ? 'active' : ''}">
+			    <a class="nav-link active" th:href="@{/user/{id}/calls(id=${user.id})}">Panel de llamada</a>
+			</li>
+			<li class="nav-item" th:classappend="${currentPath == 'telefonos' ? 'active' : ''}">
+			    <a class="nav-link" th:href="@{/user/{id}/phones(id=${user.id})}" >Teléfonos</a>
+			</li>
+			<li class="nav-item" th:classappend="${currentPath == 'medicamentos' ? 'active' : ''}">
+			    <a class="nav-link" th:href="@{/user/{id}/medicationList(id=${user.id})}">Medicamentos</a>
+			</li>
+			<li class="nav-item" th:classappend="${currentPath == 'relaciones' ? 'active' : ''}">
+			    <a class="nav-link " th:href="@{/user/{id}/careGivers(id=${user.id})}" >Relaciones de cuidado</a>
+			</li>
+		</ul>
+		
+		<div class='d-flex align-items-center text-center mx-auto ps-2'>
+			<a th:href="@{/user/delete/{id}(id=${id})}" class="deleteLink mt-auto mb-5" >Dar de baja</a>	
+		</div>
+		
+	</nav>
+
+		<div class="container px-0 mt-3 col" th:classappend="(${showPhones} or ${showCalls} or ${showMedicationList} or ${showRelations}) ? 'col-md-6' : 'col-md-10'" >
+			<small class="position-absolute ms-3 userMiniNav">
+				<a th:href="@{/user/{id}(id=${user.id})}">Detalles</a>
+				<small th:if="!${#strings.isEmpty(miniNav)}"> > </small>
+				<a th:if="${miniNav.contains('Llamadas')}" th:href="@{/user/{id}/calls(id=${user.id})}" th:text="${miniNav}"></a>
+				<a th:if="${miniNav.contains('Teléfonos')}" th:href="@{/user/{id}/phones(id=${user.id})}" th:text="${miniNav}"></a>
+				<a th:if="${miniNav.contains('Medicamentos')}" th:href="@{/user/{id}/medicationList(id=${user.id})}" th:text="${miniNav}"></a>
+				<a th:if="${miniNav.contains('Relaciones')}" th:href="@{/user/{id}/careGivers(id=${user.id})}" th:text="${miniNav}"></a>
+			</small>
+		
+			<div th:if="${errorMsg}" th:text="${errorMsg}" class='alert alert-danger' ></div>
+			<div th:if="${user}" >
+				<h1 class="text-center mt-5 mb-4" th:text="${h1}"></h1>
+				<div class="alert alert-success text-center m-0 mb-2" th:if="${successMsg}" th:text="${successMsg}"></div>
+				<div class="div-form mb-5">
+					<form th:action="${action}" method = 'post' class='form mx-5 ' th:object=${user} >
+						<div th:if="${activity == 'delete'}">
+							<div class="form-group mb-5" th:classapend="${#fields.hasErrors('cancellationCause')} ? 'has-error'">
+								<label>Indique el motivo de la baja: </label>
+								<textarea id='cancellationCause' name='cancellationCause' maxlength="225" th:field=*{cancellationCause} class='form-control' required></textarea>
+								<span th:if="${#fields.hasErrors('cancellationCause')}" th:errors="*{cancellationCause}" class="help-block" id="id-error-cancellationCause">Errores</span>
+							</div>
+							<h5>Datos del usuario que será dado de baja: </h5>
+						</div>
+						<p class='text-center' >
+							<span th:if="${activity!='add' && cancellationCause!=null || cancellationDate!=null}" class="errorMessage">Usuario inactivo</span>
+							<span class='alert alert-danger' th:if="${error != null}" th:text="${error}" ></span>		
+						</p>
+						<div class="form-group">
+							<input type='text' id='id' name='id' th:field=*{id} class='form-control' hidden >
+						</div>
+						<div class='row mt-3'>
+							<div class="form-group col-12 col-lg-6" th:classapend="${#fields.hasErrors('name')} ? 'has-error'">
+								<label>Nombre <span th:if="${activity=='add' || activity =='edit'}" class='text-danger' >*</span></label>
+								<input type='text' id='name' name='name' th:field=*{name} maxlength="100" minlength="1" class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true" required >
+								<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="help-block" id="id-error-name">Errores</span>
+							</div>
+							<div class="form-group col-12 col-lg-6 mt-3 mt-lg-0" th:classapend="${#fields.hasErrors('surname')} ? 'has-error'" >
+								<label>Apellidos</label>
+								<input type='text' id='surname' name='surname' th:field=*{surname} maxlength="150" class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true">
+								<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="help-block" id="id-error-surname">Errores</span>
+							</div>
+						
+						</div>
+						
+						<div class='row mt-3'>
+						    <div class="form-group col-12 col-lg-6" th:classappend="${#fields.hasErrors('phoneList[0].number')} ? 'has-error'">
+						        <label>Teléfono <span class="text-danger">*</span></label>
+						        <input type='text' id='phoneNumber' name='phoneList[0].number' th:field="*{phoneList[0].number}" 
+						               maxlength="9" class='form-control' required th:readonly="${activity=='delete'}"  th:disabled="${disabled} == true">
+						        <span th:if="${#fields.hasErrors('phoneList[0].number')}" th:errors="*{phoneList[0].number}" class="help-block">
+						            Errores
+						        </span>
+						    </div>
+						    <div class="form-group col-12 col-lg-6 mt-3 mt-lg-0" th:classappend="${#fields.hasErrors('phoneList[0].description')} ? 'has-error'">
+						        <label>Descripción</label>
+						        <input type='text' id='phoneDescription' name='phoneList[0].description' th:field="*{phoneList[0].description}" 
+						               maxlength="255" class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true">
+						        <span th:if="${#fields.hasErrors('phoneList[0].description')}" th:errors="*{phoneList[0].description}" class="help-block">
+						            Errores
+						        </span>
+						    </div>
+						</div>
+						
+						<div class='row mt-3'>
+							<div class="form-group col-12 col-lg-6 " th:classapend="${#fields.hasErrors('gender')} ? 'has-error'">
+								<label>Género</label>
+								<select th:field=*{gender} name='gender' id='gender' class='form-select' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true" >
+									<option th:value="'N'" th:selected="${activity=='add'}" >Elegir opción</option>
+									<option th:value="'H'" th:selected="${gender=='H'}" >Hombre</option>
+									<option th:value="'M'" th:selected="${gender=='M'}" >Mujer</option>
+								</select>
+								<span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="help-block" id="id-error-gender">Errores</span>
+							</div>
+							<div class="form-group col-12 col-lg-6 mt-3 mt-lg-0" th:classapend="${#fields.hasErrors('birthday')} ? 'has-error'">
+								<label>Fecha de nacimiento</label>
+								<input type='date' id='birthday' name='birthday' th:field=*{birthday}  class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true" >
+								<span th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="help-block" id="id-error-birthday">Errores</span>
+							</div>
+						</div>
+						<div class='row mt-3'>
+							<div class="form-group col-12 col-lg-6" th:classapend="${#fields.hasErrors('address')} ? 'has-error'" >
+								<label>Dirección</label>
+								<input type='text' id='address' name='address' maxlength="225" th:field=*{address} class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true" >
+								<span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="help-block" id="id-error-address">Errores</span>
+							</div>
+							<div class="form-group col-12 col-lg-6 mt-3 mt-lg-0" th:classapend="${#fields.hasErrors('locality')} ? 'has-error'">
+								<label>Localidad</label>
+								
+								<div th:if="${activity =='add' || activity=='edit'}" >
+									<select id='locality' name='locality' th:field=*{locality.id} th:disabled="${disabled} == true" class="form-select">
+										<option th:value="'-1'" th:selected="${activity=='add'}"  >Seleccionar opción</option>
+										<option th:each="locality : ${localityList}" th:value="${locality.id}" th:text="${locality.name}"></option>
+									</select>
+								</div>
+								<div th:unless="${activity =='add' || activity=='edit'}" >
+									<input type='text' th:value="${localityName}" disabled class='form-control'> 
+								</div>									
+								<span th:if="${#fields.hasErrors('locality')}" th:errors="*{locality}" class="help-block" id="id-error-locality">Errores</span>
+							</div>
+						</div>
+						<div class="form-group mt-3" th:classapend="${#fields.hasErrors('relevantInformation')} ? 'has-error'">
+							<label>Datos relevantes</label>
+							<textarea id='relevantInformation' name='relevantInformation' maxlength="65535" th:field=*{relevantInformation} class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true" ></textarea>
+							<span th:if="${#fields.hasErrors('relevantInformation')}" th:errors="*{relevantInformation}" class="help-block" id="id-error-relevantInformation">Errores</span>
+						</div>
+						<div class="form-group mt-3" th:classapend="${#fields.hasErrors('householdMembers')} ? 'has-error'">
+							<label>Unidad de convivencia</label>
+							<textarea id='householdMembers' name='householdMembers' maxlength="225" th:field=*{householdMembers} class='form-control' th:readonly="${activity=='delete'}" th:disabled="${disabled} == true" ></textarea>
+							<span th:if="${#fields.hasErrors('householdMembers')}" th:errors="*{householdMembers}" class="help-block" id="id-error-householdMembers">Errores</span>
+						</div>
+						<!--
+						<div class='row mt-3'>
+							<div class="form-group col-12 col-lg-6 " th:object="${careRelation}">
+								<label for='caring' data-toggle="tooltip" data-placement="top" title="Seleccione esta opción si el usuario tiene un rol de 'cuidador' sobre otro usuario del sistema. ">
+									¿Este usuario es cuidador de otro?
+								</label>
+								<select th:field="${careRelation.recipentUser}" class="form-select" >
+								
+								<!-- Añadir que seleccione el selected de aquí 
+								
+									<option value='-1' class="form-" >No</option>
+									<option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name+' '+user.surname}"  ></option>
+								</select>
+							</div>
+						</div>
+						<!-- Buttons -->
+						<div class="buttons text-center mt-5">
+							<div th:if="${activity=='show' || activity=='edited'}" >
+								<a th:href="@{/call/callFirstStage}" class="mainActionButton me-lg-4" >Volver a la lista</a>	
+								<span th:if="${activity!='edited'}">					
+									<a th:href="@{/user/edit/{id}(id=${id})}" class="editLink me-lg-4" >Editar</a>	
+								</span>			
+							</div>
+							<div th:unless="${activity=='show' || activity=='edited'}" >
+								<a th:if="${activity=='add'}" th:href="@{/call/callFirstStage}" class="secondaryButton me-4" >Cancelar</a>	
+								<a th:if="${activity!='add'}" th:href="@{/user/{id}(id=${id})}" class="secondaryButton me-4" >Cancelar</a>	
+								<input th:if="${activity=='add'}" type='submit' id='submit' name='submit' value='Dar de alta' class='mainActionButton'>			
+								<input th:if="${activity=='edit' || activity=='show'}" type='submit' id='submit' name='submit' value='Editar' class='mainActionButton'>							
+								<input th:if="${activity=='delete' || activity=='show'}" type='submit' id='submit' name='submit' value='Dar de baja' class='cancelButton'>					
+							</div>
+						</div>
+					</form>	
+				</div>
+			</div>
+		
+			<div class='result'>
+				<p th:text="${result}">  <p>
+			</div>
+			<div class="text-center" >		
+			</div>
+			
+    	
+		</div>
+		
+		<!-- Si se selecciona teléfonos -->
+		<div th:if="${showPhones}" class="col col-md-4 mt-3 pe-5 ps-0">
+        	<div th:replace="phones/userPhones :: userPhones"></div>
+    	</div>
+    	
+    	<!-- Si se selecciona llamadas -->
+		<div th:if="${showCalls}" class="col col-md-4 mt-3 pe-5 ps-0">
+        	<div th:replace="call/userCalls :: userCalls"></div>
+    	</div>
+    	
+    	<!-- Si se selecciona medicamentos -->
+		<div th:if="${showMedicationList}" class="col col-md-4 mt-3 pe-5 ps-0">
+        	<div th:replace="medication/userMedicationList :: userMedicationList"></div>
+    	</div>
+		
+		<!-- Si se selecciona relaciones -->
+		<div th:if="${showRelations}" class="col col-md-4 mt-3 pe-5 ps-0">
+        	<div th:replace="caregiverRelation/userRelations :: userRelations"></div>
+    	</div>
+		
+	</div>
+	
+	
+
+</div>
+</body>
+</div>
+</html>

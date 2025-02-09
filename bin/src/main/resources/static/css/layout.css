@@ -1,0 +1,612 @@
+:root {
+    /* Color del navegador y del logo */
+    --brand-color: #00BCBA;
+    
+    /* Color de títulos h1,h2,h3...*/
+    --title-color: #1E2C2CBA;
+
+    /* Colores de los botones */
+    --yellow-button: #f3ca38;
+    --delete-button: #be636a;
+    --add-button: #60b1c0;
+    --save-button: #b1ca52;
+
+    /* Colores de los avisos */
+    --warning-alert: #fdf3d8;
+    --error-alert: #ffdcdc;
+    --neutral-alert: #ddedfd;
+    --success-alert: #e2f8e8;
+
+    /* Colores de los bordes de los avisos */
+    --warning-alert-border: #f3e9ce;
+    --error-alert-border: #f5d7d7;
+    --neutral-alert-border: #d5e5f4;
+    --success-alert-border: #dbefe1;
+
+    /* Escalas de grises para los fondos */
+    --pure-white: #ffffff;
+    --softest-gray: #f3f3f3;
+    --soft-gray: #eaeaea;
+    --medium-gray: #c0c0c0;
+    --mediumDark-gray: #878787;
+    --dark-gray: #555555;
+  }
+  
+html, body {
+	font-family: Open Sans, Arial;
+    height: 100%; /* Asegura que todo ocupe el 100% del viewport */
+    margin: 0;    /* Elimina los márgenes predeterminados */
+    display: flex;
+    flex-direction: column; /* Ordena el contenido verticalmente */
+}
+::selection { 
+    background: #00BCBA;
+    color:#fff;  
+}
+  
+main {
+    flex-grow: 1; /* Ocupa el espacio disponible entre el header y footer */
+}
+
+footer{
+	background-color: var(--softest-gray);
+}
+
+/* Fuentes para títulos */
+h1, h2, h3, h4, h5{
+	font-family: Open Sans, Arial;
+	font-weight: bold;
+  	color: var(--title-color);
+ }
+
+/* Add button */
+.addButton {
+    border: none;
+    color: white;
+    font-weight: bold;
+    background-image: linear-gradient(30deg,  #00afac, #00bcb97e);
+    border-radius: 50px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 17px;
+    padding: 0.6em 1.5em;
+    text-decoration: none;
+ }
+ 
+.addButton:hover {
+	color: #fff;
+	background-position: right center;
+	background-size: 200% auto;
+ }
+ 
+.callButton {
+	border: none;
+	color: #fff;
+	height: 40px;
+	width: 40px;
+	font-weight: bold;
+	background-image: linear-gradient(30deg,  #00afac, #00bcb97e);
+	border-radius: 50%;
+	background-size: 100% auto;
+	font-family: inherit;
+	font-size: 17px;
+	padding: 0.4em;
+	text-decoration: none;
+}
+
+.callButton:hover{
+	color: #fff;
+	background-position: right center;
+	background-size: 200% auto;
+}
+   
+/* Cancel button */ 
+.cancelButton{
+	background-color: var(--delete-button);
+	border: none;
+	border-radius: 5px;
+	padding: 0.5em 1.5em;
+	color: white;	
+
+	
+}
+.cancelButton:hover{
+	background-color: #be636be4;
+}
+.registerButton{
+	background-color: var(--save-button);
+	border: none;
+	border-radius: 5px;
+	padding: 0.6em 1.5em;
+	color: var(--title-color);
+}
+.registerButton:hover{
+	background-color: #b0ca52d8;
+}
+
+.secondaryButton{
+	color: var(--title-color);
+	text-decoration: none;
+	padding: 0.7em 1.5em;
+	border-radius: 5px;
+	border: 1px solid var(--add-button);
+	transition: background-color 0.3s ease, color 0.3s ease;
+	
+}
+.secondaryButton:hover{
+	color: var(--pure-white);
+	background-color: var(--add-button);
+}
+
+/* Confirm edit button */
+.editLink, .deleteLink{
+	color: var(--title-color);
+	text-decoration:none;
+	padding: 0.6em 1.5em;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	border-radius: 5px;
+	
+}
+.divDeleteLink{
+    margin-left: 100px;   /* Centra verticalmente */
+}
+
+.editLink{
+	border: 1px solid var(--yellow-button);
+}
+
+.deleteLink{
+	border: 1px solid var(--delete-button);
+
+}
+.editLink:hover{
+	color: var(--title-color);
+	background-color: var(--yellow-button);
+	border: none;
+	border-radius: 5px;
+}
+
+.deleteLink:hover{
+	color: white;
+	background-color: var(--delete-button);
+	border: none;
+	border-radius: 5px;
+}
+
+/* Go to list button */
+.mainActionButton{
+	background-color: var(--add-button);
+	border: none;
+	border-radius: 5px;
+	padding: 0.6em 1.5em;
+	color: white;	
+	text-decoration:none;
+}
+
+.mainActionButton:hover{
+	background-color: #60b2c0d8;
+	color:white;
+}
+
+/* Cancel a */
+
+
+.errorMessage{
+	color: var(--delete-button);
+}
+
+thead {
+   background-color: var(--soft-gray) !important; 
+ }
+
+.help-block{
+	color: red;	
+}
+
+.superiorNav{
+	/* background-color: #00BCBA; */
+	background: linear-gradient(to bottom, #009b9a 0%, #00e6e5 100%);
+	border-bottom: 1px solid #21b9b1;
+	box-shadow: 0px 5px 9px -7px rgba(0, 0, 0, 0.5);
+}
+
+/* Prueba tabla con longitud fixeada para todas las columnas en Phones */
+.table-fixed {
+	table-layout: fixed;
+	text-align: center;
+}
+
+/* INDEX */
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    height: 50px;
+    border-radius: 30px;
+    padding-left: 45px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+
+td{
+ max-width: 100px;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+}
+
+td::-webkit-scrollbar {
+    display: none;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #888;
+}
+
+.div-form {
+	display: flex;
+    justify-content: center;
+}
+
+.div-form .form {
+	width: 65%;
+}
+
+.separator {
+  position: absolute;
+  border-left: 1px solid #007300;
+  transform: translateX(-45px);
+  height: 25px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botón de llamada del nav */ 
+.navCallButton {
+  width: 120px;
+  height: 45px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+  background-image: linear-gradient(30deg,  #00afac, #00bcb97e);
+}
+
+.navCallButton,
+.navCallButton span {
+  transition: 200ms;
+}
+
+.navCallButton .text {
+  transform: translateX(15px);
+  color: white;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.navCallButton .icon {
+  position: absolute;
+  border-left: 1px solid #007300;
+  transform: translateX(75px);
+  height: 35px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navCallButton svg {
+  transform: translate(-3px, -2px);
+}
+
+.navCallButton:hover {
+  	color: #fff;
+	background-position: right center;
+	background-size: 200% auto;
+}
+
+.navCallButton:active {
+  background-image: linear-gradient(30deg,  #00afac, #00bcb97e);
+}
+
+.navCallButton:hover .text {
+  color: transparent;
+}
+
+.navCallButton:hover .icon {
+  width: 115px;
+  border-left: none;
+  transform: translateX(0);
+}
+
+.navCallButton:focus {
+  outline: none;
+}
+
+.navCallButton:active .icon svg {
+  transform: scale(0.9);
+}
+
+.buttonSpan {
+  color: white;
+  margin: 150px;
+  font-size: 30px;
+}
+
+/*  USER LATERAL NAV*/
+.userNav{
+	box-shadow: 5px 0px 7px -7px rgba(0, 0, 0, 0.5);
+	background-color: var(--softest-gray);
+}
+.userNav>ul>li{
+	margin-top: 1rem;
+	padding-bottom: 1rem;
+	border-bottom: 2px solid var(--medium-gray);
+	list-style: none;
+}
+.userNav>ul>li>a{
+	color: var(--mediumDark-gray);
+	font-weight: bold;
+	margin-left: 0px;
+}
+.userNav>ul>li>a:hover{
+	color: var(--brand-color);
+}
+.userNav>ul>li>a:active{
+	color: var(--brand-color);
+}
+
+.userMiniNav a {
+	color: #919191;
+	text-decoration: none;
+}
+
+
+
+
+/* INDEX */
+.indexButton{
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    background-image: linear-gradient(30deg,  #00afac, #00bcb97e);    
+    border-radius: 100px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 17px;
+    padding: 3em 1.5em;
+    text-decoration: none;
+ }
+ .leftButton{
+     background-image: linear-gradient(30deg,  #005daf, #006ebc7e);
+ }
+ .topButton{
+     background-image: linear-gradient(30deg,  #5700af, #6700bc7e);
+ }
+ .rightButton{
+    background-image: linear-gradient(30deg,  #af9500, #bcbc007e);
+ }
+ 
+  .indexButton:hover {
+  	color: #fff;
+    background-position: right center;
+    background-size: 200% auto;
+   }
+
+.indexImg{
+	max-height: 300px;
+}
+.secondRow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Nav de paginación */ 
+.pagination .page-item.active .page-link {
+    background-color: var(--brand-color);
+    border-color: var(--brand-color);
+    color: white;
+    text-decoration: none;
+}
+
+.pagination .page-link {
+    color: var(--title-color);
+}
+
+.pagination .page-link:hover {
+    background-color: var(--soft-gray);
+}
+
+/* Select de usuarios por página y general */ 
+.form-inline{
+	color: var(--title-color);
+}
+
+#pageSize{
+	color: var(--title-color);
+}
+
+select {
+	background-color: white;
+	color: var(--title-color);
+}
+
+select option {
+	background: white;
+	color: var(--title-color);
+}
+
+select option:checked {
+	background-color: var(--brand-color);
+	color: white;
+}
+
+#paginationLabel {
+	color: var(--title-color);
+}
+
+#clearButton {
+	border: none;
+    color: white;
+    font-weight: bold;
+    background-color: var(--medium-gray);
+    border-radius: 50px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 17px;
+    padding: 0.3em 1em;
+    text-decoration: none;
+}
+
+.rotate-up {
+    transform: rotate(0deg);
+}
+
+.rotate-down {
+    transform: rotate(180deg);
+}
+
+.noLinkStyle {
+	text-decoration:none;
+	color: #212529;
+}
+
+.noLinkStyle:hover {
+	color: var(--brand-color);
+}
+
+
+.loginButton, .logoutButton {
+    border: none;
+    color: #212529;
+    font-weight: bold;
+    background-image: linear-gradient(30deg, #77dddb, #ccfffe);
+    border-radius: 50px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 17px;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    border: none;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+}
+.loginButton:hover, .logoutButton:hover {
+	color: #212529;
+	background-position: right center;
+	background-size: 200% auto;
+ }
+ 
+ 
+ /* LOGIN LOGOUT*/
+ .loginContainer {
+  background: #F8F9FD;
+  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+  border-radius: 40px;
+  padding: 25px 35px;
+  border: 5px solid rgb(255, 255, 255);
+  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
+  margin: 20px;
+}  
+
+
+
+.loginHeading {
+  text-align: center;
+  font-weight: 900;
+  font-size: 30px;
+  color: var(--brand-color);
+}
+
+.loginForm {
+  margin-top: 20px;
+}
+
+.loginForm .loginInput {
+  width: 100%;
+  background: white;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+  box-shadow: #cff0ff 0px 10px 10px -5px;
+  border-inline: 2px solid transparent;
+}
+
+.loginForm .loginInput::-moz-placeholder {
+  color: rgb(170, 170, 170);
+}
+
+.loginForm .loginInput::placeholder {
+  color: rgb(170, 170, 170);
+}
+
+.loginForm .loginInput:focus {
+  outline: none;
+  border-inline: 2px solid var(--brand-color);;
+}
+
+.loginForm .forgot-password {
+  display: block;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.loginForm .forgot-password a {
+  font-size: 11px;
+  color: var(--brand-color);
+  text-decoration: none;
+}
+
+.loginForm .login-button {
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  background: linear-gradient(45deg, #00BCBA 0%, rgb(18, 177, 209) 100%);
+  color: white;
+  padding-block: 15px;
+  margin: 20px auto;
+  border-radius: 20px;
+  box-shadow: rgba(157, 181, 191, 0.8784313725) 0px 20px 10px -15px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.loginForm .login-button:hover {
+  transform: scale(1.03);
+  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
+}
+
+.loginForm .login-button:active {
+  transform: scale(0.95);
+  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
+}
+
+.loginLogo{
+	max-width:150px;
+}
+
+.container-login{
+	height: 100%;
+}
+
+ 
+

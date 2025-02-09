@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+<div class="container" th:fragment="mainContent" >
+
+<body>
+	<!-- <div class="container mt-5"> -->
+		
+		<div th:if="${phone}">
+			<h1 class="text-center mt-5 mb-4" th:text="${h1}"></h1>
+			
+			<div class="alert text-center m-0 mb-2" th:classappend="${msgClass}" th:if="${msg}" th:text="${msg}"></div>
+			
+			<div class="div-form">
+				<form th:action="${action}" method = 'post' class='form' th:object=${phone} >
+					
+					<div class="form-group">
+						<input type='number' id='id' name='id' th:field=*{id} class='form-control' th:if="${activity == 'edit' || activity == 'delete'}" hidden>
+					</div>
+					
+					<div class="form-group" th:classappend="${#fields.hasErrors('phoneUser')} ? 'has-error'">
+					    <label for="phoneUser">Usuario</label>
+					    <select id="phoneUser" name="phoneUser" th:field="*{phoneUser}" class="form-control" 
+					    oninvalid="this.setCustomValidity('Por favor, selecciona un usuario válido de la lista.')" 
+					    oninput="this.setCustomValidity('')"
+					    th:disabled="${enable} == false">
+					        <option value="" selected>Seleccione un usuario</option>
+					        <option th:each="user : ${users}" 
+					                th:value="${user.id}" 
+					                th:text="${user.name} + ' ' + ${user.surname}">
+					        </option>
+					    </select>
+					    <span th:if="${#fields.hasErrors('phoneUser')}" th:errors="*{phoneUser}" class="help-block">Errores</span>
+					</div>
+					
+					<div class="form-group mt-3" th:classappend="${#fields.hasErrors('number')} ? 'has-error'">
+						<label>Teléfono</label>
+						<input type='number' id='number' name='number' th:field=*{number} required class='form-control' th:disabled="${enable} == false" >
+						<span th:if="${#fields.hasErrors('number')}" th:errors="*{number}" class="help-block" id="id-error-name">Errores</span>
+					</div>
+					
+					<div class="form-group mt-3" th:classappend="${#fields.hasErrors('description')} ? 'has-error'">
+						<label>Descripción</label>
+						<input type='text' id='description' name='description' th:field=*{description} class='form-control' th:disabled="${enable} == false">
+						<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="help-block" id="id-error-surname">Errores</span>
+					</div>
+					
+					<!--  <div th:switch="${activity}" class="text-center mt-3" >
+						<input th:case="delete" type='submit' id='submit' name='submit' value='Eliminar' required class='btn btn-danger'>					
+						<input th:case="add" type='submit' id='submit' name='submit' value='Enviar' required class='btn btn-success'>			
+						<input th:case="edit" type='submit' id='submit' name='submit' value='Editar' required class='btn btn-primary'>					
+					</div> -->
+					
+					<div class="buttons text-center mt-5">
+						<div th:if="${activity=='show' || activity=='edited'}" >
+							<a th:href="@{/phones}" class="mainActionButton me-4" >Volver a la lista</a>	
+							<span th:if="${activity!='edited'}">					
+								<a th:href="@{/phone/edit/{id}(id=${id})}" class="editLink me-4" >Editar</a>	
+								<a th:href="@{/phone/delete/{id}(id=${id})}" class="deleteLink me-4" >Dar de baja</a>	
+							</span>			
+						</div>
+						<div th:unless="${activity=='show' || activity=='edited'}" >
+							<a th:href="@{/phones}" class="secondaryButton me-4" >Cancelar</a>	
+							<input th:if="${activity=='add'}" type='submit' id='submit' name='submit' value='Dar de alta' class='mainActionButton'>			
+							<input th:if="${activity=='edit' || activity=='show'}" type='submit' id='submit' name='submit' value='Editar' class='mainActionButton'>							
+							<input th:if="${activity=='delete' || activity=='show'}" type='submit' id='submit' name='submit' value='Dar de baja' class='cancelButton'>					
+						</div>
+					</div>
+					
+				</form>	
+			</div>
+		</div>
+	
+		<div class='result'>
+			<p th:text="${result}">  <p>
+		</div>
+		
+	<!-- </div> -->
+</body>
+</div>
+</html>

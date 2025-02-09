@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html"  >
+
+	<div class="container text-center mt-5" th:fragment="mainContent"  >
+		<h1 class="text-center mt-5 mb-4" >Algo ha salido mal</h1>
+		
+		<div th:if="${msg!=null}" class='msg alert alert-danger' th:text="${msg}" ></div>
+	
+		<a th:href="@{/}" class='addButton mt-5' >Volver a inicio</a>		
+	</div>
+</html>

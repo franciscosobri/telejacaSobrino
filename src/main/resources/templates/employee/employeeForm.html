@@ -1,0 +1,92 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html">
+<body>
+    <div class="container mt-5" th:fragment="mainContent">
+        <h1 class="text-center mt-5 mb-4" th:text="${h1}"></h1>
+        <div class="alert alert-success text-center m-0 mb-2" th:if="${msg}"
+            th:class="${msg != null and msg.contains('correctamente') ? 'alert alert-success' : 'alert alert-danger'}"
+            th:text="${msg}"></div>
+        <div class="div-form">
+            <form th:if="${employee != null}"
+                  th:action="${buttonText != null && buttonText.equals('Eliminar') ? '/employee/deleteConfirm' : '/employee'}"
+                  th:object="${employee}" method="POST" class="form"
+                  th:readonly="${buttonText != null && (buttonText.equals('Mostrar') || buttonText.equals('Eliminar'))}"
+                  id="employeeForm">
+                <div class="form-group" th:classappend="${#fields.hasErrors('username')} ? 'has-error'">
+                    <input type="text" id="username" name="username" th:field="*{username}" class="form-control" hidden>
+                           
+                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="help-block">Errores</span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" name="name" th:field="*{name}" required class="form-control"
+                           th:readonly="${buttonText != null and (buttonText.equals('Mostrar') or buttonText.equals('Eliminar'))}">
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="help-block">Errores</span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
+                    <label for="lastName">Apellido</label>
+                    <input type="text" id="lastName" name="lastName" th:field="*{lastName}" required class="form-control"
+                           th:readonly="${buttonText != null and (buttonText.equals('Mostrar') or buttonText.equals('Eliminar'))}">
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="help-block">Errores</span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" th:field="*{email}" required class="form-control"
+                           th:readonly="${buttonText != null and (buttonText.equals('Mostrar') or buttonText.equals('Eliminar'))}">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="help-block">Errores</span>
+                </div>
+                
+                <!-- Mostrar campo de contraseña solo si se está editando el empleado -->
+                <div th:if="${activity=='edit'}" class="form-group emptyPasswordField">
+                    <label for="emptyPassword">Contraseña</label>
+                    <input type="password" id="emptyPassword" name="emptyPassword" class="form-control" value="******" readonly >
+                </div>
+                <div th:if="${activity=='edit'}" class="mt-2 ">
+                	<button id="changePasswordButton" class="btn btn-outline-secondary" >Cambiar contraseña</button>
+                </div>
+                <fieldset class="changePasswordField" th:if="${activity=='edit'}" style="display: none" >
+                   <div class="form-group"  th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+	                    <label for="password">Introduzca la nueva contraseña</label>
+	                    <input type="password" id="password" name="password" th:field="*{password}" class="form-control">
+	                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="help-block">Errores</span>
+                	</div>
+                 <div class="form-group">
+                    <label for="repeatedPassword">Repita la contraseña</label>
+                    <input type="password" id="repeatedPassword" name="repeatedPassword" class="form-control">
+                </div>
+                </fieldset>
+                 <div th:if="${activity=='edit' }" class="mt-2">
+                	<button id="cancelChangePassword" class="btn btn-outline-secondary" style="display: none" >Cancelar</button>
+                </div>
+                <!-- Campo para roles, editable solo si el usuario tiene permisos adecuados -->
+                <fieldset class="mt-3" th:if="${#authorization.expression('hasAuthority(''ADMIN'')') && activity=='edit'}" >
+	                <div class="form-group" th:classappend="${#fields.hasErrors('roles')} ? 'has-error'">
+	                <label for="roles" >Rol</label>
+	                <select id='roles' name='roles' th:field="*{roles}" class="form-select">
+						<option th:value="ADMIN" th:selected="${#strings.contains(employee.roles,'ADMIN') && !#strings.contains(employee.roles,'USER')}">Administrador</option>
+						<option th:value="USER" th:selected="${!#strings.contains(employee.roles,'ADMIN') && #strings.contains(employee.roles,'USER')}" >Usuario</option>
+						<option th:value="ADMIN_USER" th:selected="${#strings.contains(employee.roles,'ADMIN') && #strings.contains(employee.roles,'USER')}" >Administrador y usuario</option>
+				 	</select>
+	                    <span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="help-block">Errores</span>
+	                </div>
+               	</fieldset>
+                <!-- Se asigna rol 'USER' por defecto si no se puede editar roles -->
+                <input th:unless="${#authorization.expression('hasAuthority(''ADMIN'')') && activity=='edit'}" type="hidden" id="roles" name="roles" th:field="*{roles}">
+                
+                <div class="buttons text-center mt-5">
+                    <div th:if="${buttonText != null and buttonText.equals('Mostrar')}">
+                        <a th:href="@{/employee}" class="mainActionButton me-4">Volver a la lista</a>
+                        <a th:href="@{/employee/edit/{username}(username=${employee.username})}" class="editLink me-4">Editar</a>
+                        <a th:href="@{/employee/delete/{username}(username=${employee.username})}" class="deleteLink me-4">Eliminar</a>
+                    </div>
+                    <div th:unless="${buttonText != null and buttonText.equals('Mostrar')}">
+                        <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"  th:href="@{/employee}" class="secondaryButton me-4">Cancelar</a>
+                        <input th:if="${buttonText != null and buttonText.equals('Enviar')}" type="submit" id="submit" name="submit" value="Dar de Alta" class="mainActionButton">
+                        <input th:if="${buttonText != null and buttonText.equals('Editar')}" type="submit" id="submit" name="submit" value="Editar" class="mainActionButton">
+                        <input th:if="${buttonText != null and buttonText.equals('Eliminar')}" type="submit" id="submit" name="submit" value="Eliminar" class="cancelButton">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
