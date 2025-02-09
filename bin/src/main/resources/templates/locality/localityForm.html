@@ -1,8 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="layout.html">
 <body>
     <div class="container mt-5" th:fragment="mainContent">
-       
-       	<h1 class="text-center mt-5 mb-4" th:text="${h1}"></h1>
+        <h1 class="text-center my-5"
+            th:text="${locality != null ? (buttonText.equals('Eliminar') ? 'Eliminar Localidad' : (buttonText.equals('Mostrar') ? 'Mostrar Localidad' : 'Editar Localidad')) : 'Añadir Localidad'}"></h1>
 
         <div class="alert alert-success text-center m-0 mb-2" th:if="${msg}"
             th:class="${msg.contains('correctamente') ? 'alert alert-success' : 'alert alert-danger'}"
@@ -26,14 +26,12 @@
                         <a th:href="@{/locality}" class="mainActionButton me-4">Volver a la lista</a>
                         <a th:href="@{/locality/edit/{id}(id=${locality.id})}" class="editLink me-4">Editar</a>
                         <a th:href="@{/locality/delete/{id}(id=${locality.id})}" class="deleteLink me-4">Eliminar</a>
-                        
                     </div>
                     <div th:unless="${buttonText.equals('Mostrar')}">
                         <a th:href="@{/locality}" class="secondaryButton me-4">Cancelar</a>
-                        <input th:if="${buttonText.equals('Enviar')}" type="submit" id="submit" name="submit" value="Dar de Alta" class="mainActionButton">
+                        <input th:if="${buttonText.equals('Enviar')}" type="submit" id="submit" name="submit" value="Añadir" class="mainActionButton">
                         <input th:if="${buttonText.equals('Editar')}" type="submit" id="submit" name="submit" value="Editar" class="mainActionButton">
                         <input th:if="${buttonText.equals('Eliminar')}" type="submit" id="submit" name="submit" value="Eliminar" class="cancelButton">
-                        
                     </div>
                 </div>
             </form>

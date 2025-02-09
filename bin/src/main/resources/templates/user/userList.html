@@ -14,20 +14,20 @@
 		    <div class="col-md-6">
 			    <div class="row" >
 			      <div class="search-container col-11">
-				      <form th:action='@{/users/userSearch}' method='GET' id='searchForm'>
-				        <input id="searchInput" type="text" th:value="${searchValue}" name='searchValue' class="form-control search-input" placeholder="Buscar usuario...">
+				      <form th:action='@{/users/userSearch}' method='GET' >
+				        <input type="text" th:value="${searchValue}" name='searchValue' class="form-control search-input" placeholder="Buscar usuario...">
 				        <svg class='search-icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1E2C2CBA"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
 				      </form>
 			      </div>
 			      <div class='col-1'>
-				      <button id='clearButton' class='mt-2'>Limpiar</button>
+				      <button class='clearButton' >Limpiar</button>
 			      </div>
 			    </div>
 		    </div>
 		 </div>
 			 	
 		<!-- {searchValue}(searchValue=${searchValue}) -->
-		<div th:if="${paginatedUsers}" >
+		<div th:if="${users}" >
 			<!-- Añadir condicional y según si se ha añadio o borrado un usuario, indicarlo. Si se ha añadido, que venga un link para ver el usuario añadido -->
 			<table class='table table-hover table-fixed' >
 				<thead>
@@ -40,7 +40,7 @@
 						<th>Acciones </th>
 					</tr>
 				</thead>
-				<tbody th:each="user : ${paginatedUsers}">
+				<tbody th:each="user : ${users}">
 					<tr><!-- Procesar los datos en el servicio, para que se muestre la información procesada (la edad entre paréntesis, p.e.) -->
 						<td th:text="${user.name}" class='overflow-auto'> </td>
 						<td th:text="${user.surname}"></td>

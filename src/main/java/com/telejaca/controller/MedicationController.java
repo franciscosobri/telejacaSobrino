@@ -335,10 +335,7 @@ public class MedicationController {
 	    model.addAttribute("h1", h1);
 	    model.addAttribute("action", action);
 	    
-		String localityName = "";
-		if(user.getLocality()!=null) {
-			localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();				
-		}
+	    String localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();
 	    model.addAttribute("localityName", localityName);
 
 	    List<Medication> medicationList = user.getMedicationList();

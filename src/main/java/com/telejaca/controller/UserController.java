@@ -213,10 +213,7 @@ public class UserController {
 		model.addAttribute("disabled", true);
 		model.addAttribute("action", "");
 		model.addAttribute("activity", "show");
-		String localityName = "";
-		if(user.getLocality()!=null) {
-			localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();				
-		}
+		String localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();
 		model.addAttribute("localityName", localityName);
 			
 		return "user/userForm";			
@@ -290,7 +287,7 @@ public class UserController {
 		
 		if(notFound) {
 			model.addAttribute("errorMsg", error);
-			template="call/callFirstStage";
+			template="user/userList";
 			try {
 				List<User> users = userService.getAllActiveUsers();
 				model.addAttribute("users", users);
@@ -329,10 +326,7 @@ public class UserController {
 		model.addAttribute("disabled", false);
 		model.addAttribute("action", "/user/delete/userDeleted/");
 		model.addAttribute("activity", "delete");
-		String localityName = "";
-		if(user.getLocality()!=null) {
-			localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();				
-		}
+		String localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();
 		model.addAttribute("localityName", localityName);
 			
 		return "user/userForm";			

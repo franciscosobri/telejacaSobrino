@@ -159,20 +159,20 @@
 						</div>
 						<!-- Buttons -->
 						<div class="buttons text-center mt-5">
-						    <div th:if="${activity=='show' || activity=='edited'}">
-						        <a th:href="@{/call/callFirstStage}" class="mainActionButton me-lg-4">Volver a la lista</a> 
-						        <span th:if="${activity!='edited'}">
-						            <a th:href="@{/user/edit/{id}(id=${user.id})}" class="editLink me-lg-4">Editar</a>
-						        </span>
-					    	</div>
-						    <div th:unless="${activity=='show' || activity=='edited'}">
-						        <a th:if="${activity=='add'}" th:href="@{call/callFirstStage}" class="secondaryButton me-4">Cancelar</a>    
-						        <a th:if="${activity!='add'}" th:href="@{/user/{id}(id=${id})}" class="secondaryButton me-4">Cancelar</a>  
-						        <input th:if="${activity=='add'}" type='submit' id='submit' name='submit' value='Dar de alta' class='mainActionButton'>          
-						        <input th:if="${activity=='edit' || activity=='show'}" type='submit' id='submit' name='submit' value='Editar' class='mainActionButton'>                            
-						        <input th:if="${activity=='delete' || activity=='show'}" type='submit' id='submit' name='submit' value='Dar de baja' class='cancelButton'>                  
-						    </div>
-					</div>
+							<div th:if="${activity=='show' || activity=='edited'}" >
+								<a th:href="@{/call/callFirstStage}" class="mainActionButton me-lg-4" >Volver a la lista</a>	
+								<span th:if="${activity!='edited'}">					
+									<a th:href="@{/user/edit/{id}(id=${id})}" class="editLink me-lg-4" >Editar</a>	
+								</span>			
+							</div>
+							<div th:unless="${activity=='show' || activity=='edited'}" >
+								<a th:if="${activity=='add'}" th:href="@{/users}" class="secondaryButton me-4" >Cancelar</a>	
+								<a th:if="${activity!='add'}" th:href="@{/user/{id}(id=${id})}" class="secondaryButton me-4" >Cancelar</a>	
+								<input th:if="${activity=='add'}" type='submit' id='submit' name='submit' value='Dar de alta' class='mainActionButton'>			
+								<input th:if="${activity=='edit' || activity=='show'}" type='submit' id='submit' name='submit' value='Editar' class='mainActionButton'>							
+								<input th:if="${activity=='delete' || activity=='show'}" type='submit' id='submit' name='submit' value='Dar de baja' class='cancelButton'>					
+							</div>
+						</div>
 					</form>	
 				</div>
 			</div>

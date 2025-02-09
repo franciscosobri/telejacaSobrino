@@ -387,19 +387,15 @@ body::-webkit-scrollbar-thumb {
     border: none;
     color: #fff;
     font-weight: bold;
-    background-image: linear-gradient(30deg, #00afac, #00bcb97e);
+    background-image: linear-gradient(30deg,  #00afac, #00bcb97e);    
     border-radius: 100px;
     background-size: 100% auto;
     font-family: inherit;
     font-size: 17px;
     padding: 3em 1.5em;
     text-decoration: none;
-    width: 250px;
-    display: inline-block;
-    text-align: center;
  }
  .leftButton{
- 
      background-image: linear-gradient(30deg,  #005daf, #006ebc7e);
  }
  .topButton{
@@ -422,7 +418,6 @@ body::-webkit-scrollbar-thumb {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
 }
 
 /* Nav de paginación */ 
@@ -498,137 +493,3 @@ select option:checked {
 .noLinkStyle:hover {
 	color: var(--brand-color);
 }
-
-
-.loginButton, .logoutButton {
-    border: none;
-    color: #212529;
-    font-weight: bold;
-    background-image: linear-gradient(30deg, #77dddb, #ccfffe);
-    border-radius: 50px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 17px;
-    padding: 0.6em 1em;
-    text-decoration: none;
-    border: none;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
-}
-.loginButton:hover, .logoutButton:hover {
-	color: #212529;
-	background-position: right center;
-	background-size: 200% auto;
- }
- 
- 
- /* LOGIN LOGOUT*/
- .loginContainer {
-  background: #F8F9FD;
-  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
-  border-radius: 40px;
-  padding: 25px 35px;
-  border: 5px solid rgb(255, 255, 255);
-  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
-  margin: 20px;
-}  
-
-
-
-.loginHeading {
-  text-align: center;
-  font-weight: 900;
-  font-size: 30px;
-  color: var(--brand-color);
-}
-
-.loginForm {
-  margin-top: 20px;
-}
-
-.loginForm .loginInput {
-  width: 100%;
-  background: white;
-  border: none;
-  padding: 15px 20px;
-  border-radius: 20px;
-  margin-top: 15px;
-  box-shadow: #cff0ff 0px 10px 10px -5px;
-  border-inline: 2px solid transparent;
-}
-
-.loginForm .loginInput::-moz-placeholder {
-  color: rgb(170, 170, 170);
-}
-
-.loginForm .loginInput::placeholder {
-  color: rgb(170, 170, 170);
-}
-
-.loginForm .loginInput:focus {
-  outline: none;
-  border-inline: 2px solid var(--brand-color);;
-}
-
-.loginForm .forgot-password {
-  display: block;
-  margin-top: 10px;
-  margin-left: 10px;
-}
-
-.loginForm .forgot-password a {
-  font-size: 11px;
-  color: var(--brand-color);
-  text-decoration: none;
-}
-
-.loginForm .login-button {
-  display: block;
-  width: 100%;
-  font-weight: bold;
-  background: linear-gradient(45deg, #00BCBA 0%, rgb(18, 177, 209) 100%);
-  color: white;
-  padding-block: 15px;
-  margin: 20px auto;
-  border-radius: 20px;
-  box-shadow: rgba(157, 181, 191, 0.8784313725) 0px 20px 10px -15px;
-  border: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.loginForm .login-button:hover {
-  transform: scale(1.03);
-  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
-}
-
-.loginForm .login-button:active {
-  transform: scale(0.95);
-  box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
-}
-
-.loginLogo{
-	max-width:150px;
-}
-
-.container-login{
-	height: 100%;
-}
-
-.btnlg{
-    border: none;
-    color: white;
-    font-weight: bold;
-    background-image: linear-gradient(30deg,  #00afac, #00bcb97e);
-    border-radius: 50px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 22px;
-    padding: 0.6em 1.5em;
-    text-decoration: none;
- }
-
- .btnlg:hover {
-    color: white;
-    background-position: right center;
-	background-size: 200% auto;	
- }
-

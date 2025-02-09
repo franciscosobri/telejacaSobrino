@@ -80,10 +80,7 @@ public class CallService {
 		model.addAttribute("h1", "Detalles del usuario");
 		model.addAttribute("disabled", true);
 		model.addAttribute("activity", "show");
-		String localityName = "";
-		if(user.getLocality()!=null) {
-			localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();				
-		}
+		String localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();
 		model.addAttribute("localityName", localityName);
 	}
 }

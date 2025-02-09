@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,10 +82,7 @@ public class CallController {
 			model.addAttribute("disabled", true);
 			model.addAttribute("action", "");
 			model.addAttribute("activity", "show");
-			String localityName = "";
-			if(user.getLocality()!=null) {
-				localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();				
-			}
+			String localityName = user.getLocality().getName()==null ? "Sin registro" : user.getLocality().getName();
 			model.addAttribute("localityName", localityName);
 			
 			
@@ -135,7 +130,6 @@ public class CallController {
 
 	    if (error.isEmpty()) {
 	        List<Call> latestCalls = callService.getLatestCallsByUser(user);
-	        model.addAttribute("h1", "Detalles del usuario");
 	        model.addAttribute("calls", latestCalls);
 	        model.addAttribute("showCalls", true);
 	        model.addAttribute("activity", "show");
@@ -155,21 +149,6 @@ public class CallController {
 		try {
 			user = userService.getUserValid(id);
 			model.addAttribute("user", user);
-			
-			List<Call> calls = callService.getLatestCallsByUser(user);
-            model.addAttribute("calls", calls);
-            
-            if(!((Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoles().contains("USER")) {
-    			List<Call> latestCalls = callService.getLatestCallsByUser(user);
-    	        model.addAttribute("calls", latestCalls);
-    	        model.addAttribute("h1", "Detalles del usuario");
-    	        model.addAttribute("showCalls", true);
-    	        model.addAttribute("activity", "show");
-    	        model.addAttribute("disabled", true);
-    	        model.addAttribute("errorCallMsg", "Se debe tener el rol 'USER' para registrar llamadas");
-    	        return "user/userForm";
-    		}
-
 		}catch(UserException ue) {
 			model.addAttribute("msg", ue.getMessage());
 			ue.printStackTrace();
@@ -217,18 +196,6 @@ public class CallController {
 		try {
 			user = userService.getUserValid(userId);
 			model.addAttribute("user", user);
-			
-			if(!((Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoles().contains("USER")) {
-    			List<Call> latestCalls = callService.getLatestCallsByUser(user);
-    	        model.addAttribute("calls", latestCalls);
-    	        model.addAttribute("h1", "Detalles del usuario");
-    	        model.addAttribute("showCalls", true);
-    	        model.addAttribute("activity", "show");
-    	        model.addAttribute("disabled", true);
-    	        model.addAttribute("errorCallMsg", "Se debe tener el rol 'USER' para editar llamadas");
-    	        return "user/userForm";
-    		}
-			
 		}catch(UserException ue) {
 			model.addAttribute("msg", ue.getMessage());
 			ue.printStackTrace();
@@ -242,15 +209,9 @@ public class CallController {
 			LocalDate callDate = LocalDate.parse(date);
 			
 			Call callToEdit = this.callService.getHigherOrderCall(userIdInt, emplUsername, callTypeIdInt, callDate);
-			
 			model.addAttribute("call", callToEdit);
 			
 			validInformation=true;
-			
-			if(!((Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername().equals(callToEdit.getEmployee().getUsername())){
-				model.addAttribute("errorCallMsg", "Sólo " + callToEdit.getEmployee().getUsername() + " puede editar esta llamada");
-				validInformation=false;
-			}
 			
 		}catch(NumberFormatException nfe) {//Si algún id no es numérico
 			model.addAttribute("msg", nfe.getMessage());
@@ -277,9 +238,6 @@ public class CallController {
 			model.addAttribute("callDisabled", false);
 			model.addAttribute("callAction", "/user/"+user.getId()+"/calls/edited");
 		}
-		List<Call> calls = callService.getLatestCallsByUser(user);
-        model.addAttribute("calls", calls);
-        
 		return "user/userForm";
 	}
 	
@@ -304,39 +262,34 @@ public class CallController {
 		
 		
 		/*---- Call content -----*/
+		
 		if(!bindingResult.hasErrors()) {
 			//Añadimos los datos que faltan
 			newCall.setDate(LocalDate.now());
 			newCall.setUser(user);
 			newCall.setOrder(1);
-			newCall.setEmployee(this.employeeService.getEmployeeByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null));
-			
+
 // ------------- CAMBIAR ESTA ASIGNACIÓN POR LA DEL USUARIO QUE HAYA INICIADO SESIÓN. Aquí creamos el usuario admin si no está creado previamente, para que nunca falle.
 			//Validamos si el usuario admin ya está creado y si no lo creamos, para que no dé fallo. Todas las llamadas se asignarán a admin temporalmente
-//			if(!this.employeeService.isAlreadyRegistered("admin")) {
-//				Employee admin = new Employee();
-//				admin.setUsername("admin");
-//				admin.setName("admin");
-//				admin.setLastName("admin");
-//				admin.setPassword("admincillo");
-//				admin.setRoles("ADMIN");
-//				admin.setEmail("admin@admin.es");
-//				this.employeeService.saveEmployee(admin);
-//				newCall.setEmployee(admin);
-//			}else {
-//				newCall.setEmployee(this.employeeService.getEmployeeByUsername("admin").orElse(null));
-//			}
-			
+			if(!this.employeeService.isAlreadyRegistered("admin")) {
+				Employee admin = new Employee();
+				admin.setUsername("admin");
+				admin.setName("admin");
+				admin.setLastName("admin");
+				admin.setPassword("admincillo");
+				admin.setRoles("ADMIN");
+				admin.setEmail("admin@admin.es");
+				this.employeeService.saveEmployee(admin);
+				newCall.setEmployee(admin);
+			}else {
+				newCall.setEmployee(this.employeeService.getEmployeeByUsername("admin").orElse(null));
+			}
 //----------------------------------------------------------------------------------------
 			
 			//1. Validar la llamada : que no esté ya registrada 
 			if(this.callService.callAlreadyExists(newCall)) {
 				model.addAttribute("errorCallMsg", "La llamada ya está registrada. Edite la llamada para añadir información nueva.");
-			} //	 Si no tiene el rol USER, no puede añadir llamada 
-			else if(!((Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoles().contains("USER")) {
-				model.addAttribute("errorCallMsg", "Se debe tener el rol 'USER' para registrar llamadas");
-			}
-			else {// Guardamos la llamada
+			}else {// Guardamos la llamada
 				try {
 					this.callService.savecall(newCall);					
 					model.addAttribute("successCallMsg", "Llamada registrada con éxito.");				
@@ -385,13 +338,7 @@ public class CallController {
 			
 			if(!this.callService.callAlreadyExists(editedCall)) {
 				model.addAttribute("errorCallMsg", "La llamada no está registrada. Registre una nueva llamada.");
-			}//	 Si no tiene el rol USER, no puede editar llamada 
-			else if(!((Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getRoles().contains("USER")) {
-				model.addAttribute("errorCallMsg", "Se debe tener el rol 'USER' para editar llamadas");
-			} // Si un empleado intenta editar la llamada de otro, no puede editar llamada 
-			else if(!((Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername().equals(editedCall.getEmployee().getUsername())) {
-				model.addAttribute("errorCallMsg", "Sólo " + editedCall.getEmployee().getUsername() + " puede editar esta llamada");
-			} else {// Guardamos la llamada
+			}else {// Guardamos la llamada
 				this.callService.editCall(model, editedCall);					
 			}	
 		}else {	
